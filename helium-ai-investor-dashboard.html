@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helium AI — Investor Margin & Revenue Forecast</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--pink:#F4B8C1;--yellow:#F7E4A6;--blue:#A8D5E2;--green:#B5E6C5;
+--pink-l:#FDF0F2;--yellow-l:#FFFBF0;--blue-l:#F0F8FA;--green-l:#F0FAF3;
+--pk:#c4506a;--yl:#b8960a;--bl:#3a8fa3;--gn:#3a8f5a;
+--t:#1A1A2E;--t2:#4A4A6A;--sf:#FAFAFA;--w:#FFFFFF;--bd:rgba(26,26,46,0.08);
+}
+body{font-family:'DM Sans',sans-serif;color:var(--t);background:var(--sf);line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Fraunces',serif;line-height:1.25}
+.c{max-width:1200px;margin:0 auto;padding:0 24px}
+nav{background:var(--w);border-bottom:1px solid var(--bd);padding:14px 0;position:sticky;top:0;z-index:100}
+nav .c{display:flex;align-items:center;justify-content:space-between}
+nav .logo{font-family:'Fraunces',serif;font-size:18px;font-weight:700}
+nav .logo span{color:var(--pk)}
+nav .badge{background:var(--green);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:12px}
+.hero{padding:60px 0 44px;background:linear-gradient(180deg,var(--w) 0%,var(--green-l) 100%)}
+.hero h1{font-size:clamp(26px,4vw,42px);max-width:720px;margin-bottom:12px}
+.hero p{color:var(--t2);font-size:15px;max-width:600px;margin-bottom:28px}
+.hg{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:768px){.hg{grid-template-columns:repeat(2,1fr)}}
+.hs{background:var(--w);border:1px solid var(--bd);border-radius:12px;padding:18px;text-align:center}
+.hs .n{font-family:'Fraunces',serif;font-size:26px;font-weight:700}
+.hs .l{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+section{padding:48px 0}
+section.alt{background:var(--w)}
+.st{font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--t2);margin-bottom:6px}
+.sh{font-size:clamp(20px,3vw,30px);margin-bottom:20px}
+.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:12px;background:var(--w);margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--sf);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--bd);font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:var(--t2)}
+td{padding:9px 12px;border-bottom:1px solid var(--bd)}
+tr:last-child td{border-bottom:none}
+.hr{background:var(--green-l)!important;font-weight:700}
+.hr2{background:var(--blue-l)!important;font-weight:600}
+.hr3{background:var(--yellow-l)!important;font-weight:600}
+.hr4{background:var(--pink-l)!important;font-weight:600}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:20px}
+.cd{background:var(--w);border:1px solid var(--bd);border-radius:12px;padding:20px}
+.cd h4{font-size:14px;margin-bottom:10px}
+.cd .big{font-family:'Fraunces',serif;font-size:32px;font-weight:700;margin-bottom:2px}
+.cd .sub{font-size:11px;color:var(--t2)}
+.note{background:var(--yellow-l);border:1px solid var(--yellow);border-radius:10px;padding:16px;font-size:12px;color:var(--t2);margin:20px 0}
+.note strong{color:var(--t)}
+.mg{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.mg span:first-child{width:80px;font-size:12px;font-weight:600;text-align:right;flex-shrink:0}
+.mg-track{flex:1;height:24px;background:var(--sf);border-radius:4px;overflow:hidden}
+.mg-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:11px;font-weight:700;color:var(--t)}
+.bar-wrap{background:var(--w);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:20px}
+.bar-wrap h4{font-size:15px;margin-bottom:14px}
+.chart-row{display:flex;align-items:flex-end;gap:4px;height:180px;padding:0 4px;margin-bottom:6px}
+.chart-bar{flex:1;border-radius:5px 5px 0 0;position:relative;min-width:30px;transition:height 0.4s}
+.chart-bar .v{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:600;white-space:nowrap}
+.chart-labels{display:flex;gap:4px;padding:0 4px}
+.chart-labels span{flex:1;text-align:center;font-size:9px;color:var(--t2);min-width:30px}
+.verdict{background:linear-gradient(135deg,var(--green-l),var(--blue-l));border-radius:14px;padding:36px;text-align:center;margin:28px 0}
+.verdict h3{font-size:22px;margin-bottom:8px}
+.verdict p{color:var(--t2);max-width:600px;margin:0 auto;font-size:13px}
+footer{padding:28px 0;text-align:center;color:var(--t2);font-size:11px;border-top:1px solid var(--bd)}
+/* competitor */
+.comp-card{border:1px solid var(--bd);border-radius:12px;padding:24px;background:var(--w)}
+.comp-card h4{font-size:16px;margin-bottom:4px}
+.comp-card .sub{font-size:12px;color:var(--t2);margin-bottom:16px}
+.comp-metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);font-size:13px}
+.comp-metric:last-child{border-bottom:none}
+.comp-metric span:last-child{font-weight:600}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:768px){.comp-grid{grid-template-columns:1fr}}
+.tag-he{display:inline-block;background:var(--green);padding:2px 10px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:0.5px}
+.divider{height:1px;background:var(--bd);margin:32px 0}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="c">
+<div class="logo">Helium <span>AI</span></div>
+<div class="badge">Investor Deck v2</div>
+</div>
+</nav>
+
+<section class="hero">
+<div class="c">
+<h1>Profit Margins, Revenue Forecast & Competitive Benchmarks</h1>
+<p>Detailed unit economics, 3-year projection with 250K user acquisition target, and competitive growth comparison against Manus AI and Genspark.</p>
+<div class="hg">
+<div class="hs"><div class="n" style="color:var(--gn)">250K</div><div class="l">Year 1 Users Target</div></div>
+<div class="hs"><div class="n" style="color:var(--bl)">$6.1M</div><div class="l">Y1 Subscription Rev</div></div>
+<div class="hs"><div class="n" style="color:var(--pk)">76-90%</div><div class="l">Gross Margin Range</div></div>
+<div class="hs"><div class="n" style="color:var(--yl)">$29.8M</div><div class="l">Y3 Total Revenue</div></div>
+<div class="hs"><div class="n" style="color:var(--gn)">65%</div><div class="l">Paid Conversion</div></div>
+</div>
+</div>
+</section>
+
+<!-- S1: USER ACQUISITION MODEL -->
+<section class="alt">
+<div class="c">
+<div class="st">Section 1 of 5</div>
+<h2 class="sh">User Acquisition & Conversion Model</h2>
+<p style="color:var(--t2);font-size:13px;margin-bottom:20px">Target: 250,000 organic users in 12 months. 65% convert to paid subscriptions. Of paid users: 69.2% choose Pro ($35/mo), 30.8% choose Max ($100/mo). Post-Y1 organic growth: 15-20% year over year.</p>
+
+<div class="tw">
+<table>
+<thead>
+<tr><th>Quarter</th><th class="r">New Signups</th><th class="r">Cumulative Users</th><th class="r">Paid Conversions (65%)</th><th class="r">Active Paid (after churn)</th><th class="r">Pro Users (69.2%)</th><th class="r">Max Users (30.8%)</th></tr>
+</thead>
+<tbody>
+<tr class="hr2"><td colspan="7" style="font-weight:700">Year 1: Ramp to 250K Users</td></tr>
+<tr><td>Q1 Y1</td><td class="r">25,000</td><td class="r">25,000</td><td class="r">16,250</td><td class="r">14,625</td><td class="r">10,121</td><td class="r">4,504</td></tr>
+<tr><td>Q2 Y1</td><td class="r">50,000</td><td class="r">75,000</td><td class="r">32,500</td><td class="r">32,418</td><td class="r">22,433</td><td class="r">9,985</td></tr>
+<tr><td>Q3 Y1</td><td class="r">75,000</td><td class="r">150,000</td><td class="r">48,750</td><td class="r">53,890</td><td class="r">37,291</td><td class="r">16,599</td></tr>
+<tr><td>Q4 Y1</td><td class="r">100,000</td><td class="r">250,000</td><td class="r">65,000</td><td class="r">78,451</td><td class="r">54,288</td><td class="r">24,163</td></tr>
+<tr class="hr"><td>Y1 End</td><td class="r">250,000</td><td class="r">250,000</td><td class="r">162,500</td><td class="r">78,451</td><td class="r">54,288</td><td class="r">24,163</td></tr>
+<tr class="hr3"><td colspan="7" style="font-weight:700">Year 2: 17.5% YoY User Growth</td></tr>
+<tr><td>Y2 End</td><td class="r">+43,750</td><td class="r">293,750</td><td class="r">190,938</td><td class="r">97,064</td><td class="r">67,168</td><td class="r">29,896</td></tr>
+<tr class="hr3"><td colspan="7" style="font-weight:700">Year 3: 17.5% YoY User Growth</td></tr>
+<tr><td>Y3 End</td><td class="r">+51,406</td><td class="r">345,156</td><td class="r">224,351</td><td class="r">118,752</td><td class="r">82,176</td><td class="r">36,576</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note">
+<strong>Churn Model:</strong> 6% monthly churn on monthly subscribers, 2.5% monthly churn on annual subscribers. Assumption: 45% of paid users choose annual billing (with 15% discount). Active paid reflects net users after churn is applied quarterly. The 250K total users includes both active and churned users. 78,451 active paying users at Y1 end represents the net retention from 162,500 total conversions.
+</div>
+</div>
+</section>
+
+<!-- S2: GROSS MARGINS BY PLAN -->
+<section>
+<div class="c">
+<div class="st">Section 2 of 5</div>
+<h2 class="sh">Gross Margins by Plan & User Segment</h2>
+
+<h3 style="font-size:16px;margin-bottom:10px;color:var(--gn)">Pro Plan ($35/mo monthly, $31/mo annual) <span class="tag-he">69.2% OF PAID</span></h3>
+<div class="tw">
+<table>
+<thead><tr><th>User Type</th><th>Distribution</th><th class="r">Monthly API Cost</th><th class="r">Price</th><th class="r">Gross Profit</th><th class="r">Gross Margin</th></tr></thead>
+<tbody>
+<tr><td>Heavy (Power Users)</td><td>30%</td><td class="r">$17.32</td><td class="r">$35.00</td><td class="r">$17.68</td><td class="r">50.5%</td></tr>
+<tr><td>Moderate (Regular)</td><td>35%</td><td class="r">$5.39</td><td class="r">$35.00</td><td class="r">$29.61</td><td class="r">84.6%</td></tr>
+<tr><td>Light (Casual)</td><td>25%</td><td class="r">$0.71</td><td class="r">$35.00</td><td class="r">$34.29</td><td class="r">98.0%</td></tr>
+<tr><td>Dormant (Paying, Inactive)</td><td>10%</td><td class="r">$0.00</td><td class="r">$35.00</td><td class="r">$35.00</td><td class="r">100%</td></tr>
+<tr class="hr"><td>Blended (Monthly)</td><td>Weighted</td><td class="r">$8.33</td><td class="r">$35.00</td><td class="r">$26.67</td><td class="r" style="font-size:15px">76.2%</td></tr>
+<tr class="hr2"><td>Blended (Annual Billing)</td><td>Weighted</td><td class="r">$8.33</td><td class="r">$31.00</td><td class="r">$22.67</td><td class="r">73.1%</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 style="font-size:16px;margin-bottom:10px;color:var(--bl)">Max Plan ($100/mo monthly, $89/mo annual) <span class="tag-he">30.8% OF PAID</span></h3>
+<div class="tw">
+<table>
+<thead><tr><th>User Type</th><th>Distribution</th><th class="r">Monthly API Cost</th><th class="r">Price</th><th class="r">Gross Profit</th><th class="r">Gross Margin</th></tr></thead>
+<tbody>
+<tr><td>Heavy (Power Users)</td><td>45%</td><td class="r">$25.99</td><td class="r">$100.00</td><td class="r">$74.01</td><td class="r">74.0%</td></tr>
+<tr><td>Moderate (Regular)</td><td>30%</td><td class="r">$7.55</td><td class="r">$100.00</td><td class="r">$92.45</td><td class="r">92.5%</td></tr>
+<tr><td>Light (Casual)</td><td>15%</td><td class="r">$1.58</td><td class="r">$100.00</td><td class="r">$98.42</td><td class="r">98.4%</td></tr>
+<tr><td>Dormant (Paying, Inactive)</td><td>10%</td><td class="r">$0.00</td><td class="r">$100.00</td><td class="r">$100.00</td><td class="r">100%</td></tr>
+<tr class="hr"><td>Blended (Monthly)</td><td>Weighted</td><td class="r">$14.89</td><td class="r">$100.00</td><td class="r">$85.11</td><td class="r" style="font-size:15px">85.1%</td></tr>
+<tr class="hr2"><td>Blended (Annual Billing)</td><td>Weighted</td><td class="r">$14.89</td><td class="r">$89.00</td><td class="r">$74.11</td><td class="r">83.3%</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 style="font-size:16px;margin-bottom:10px;color:var(--pk)">Teams Plan ($80/user/mo, min 5 seats)</h3>
+<div class="tw">
+<table>
+<thead><tr><th>User Type</th><th>Distribution</th><th class="r">Monthly API Cost</th><th class="r">Price</th><th class="r">Gross Profit</th><th class="r">Gross Margin</th></tr></thead>
+<tbody>
+<tr><td>Heavy</td><td>25%</td><td class="r">$17.32</td><td class="r">$80.00</td><td class="r">$62.68</td><td class="r">78.4%</td></tr>
+<tr><td>Moderate</td><td>40%</td><td class="r">$5.39</td><td class="r">$80.00</td><td class="r">$74.61</td><td class="r">93.3%</td></tr>
+<tr><td>Light</td><td>25%</td><td class="r">$0.71</td><td class="r">$80.00</td><td class="r">$79.29</td><td class="r">99.1%</td></tr>
+<tr><td>Dormant</td><td>10%</td><td class="r">$0.00</td><td class="r">$80.00</td><td class="r">$80.00</td><td class="r">100%</td></tr>
+<tr class="hr"><td>Blended per Seat</td><td>Weighted</td><td class="r">$8.33</td><td class="r">$80.00</td><td class="r">$71.67</td><td class="r" style="font-size:15px">89.6%</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- MARGIN VISUAL -->
+<div class="bar-wrap">
+<h4>Gross Margin Comparison (Blended, Monthly Pricing)</h4>
+<div class="mg"><span>Pro</span><div class="mg-track"><div class="mg-bar" style="width:76.2%;background:var(--green)">76.2%</div></div></div>
+<div class="mg"><span>Max</span><div class="mg-track"><div class="mg-bar" style="width:85.1%;background:var(--blue)">85.1%</div></div></div>
+<div class="mg"><span>Teams</span><div class="mg-track"><div class="mg-bar" style="width:89.6%;background:var(--pink)">89.6%</div></div></div>
+<div class="mg"><span>Weighted</span><div class="mg-track"><div class="mg-bar" style="width:82%;background:var(--yellow)">82.0% (Platform Blended)</div></div></div>
+</div>
+</div>
+</section>
+
+<!-- S3: 3 YEAR REVENUE FORECAST -->
+<section class="alt" id="forecast">
+<div class="c">
+<div class="st">Section 3 of 5</div>
+<h2 class="sh">3-Year Revenue Forecast</h2>
+<p style="color:var(--t2);font-size:13px;margin-bottom:20px">Subscription revenue targets $5-7M in Year 1. B2B Bespoke grows 17.5% quarter-over-quarter. B2B License revenue is cumulative (3-year contracts). Teams: 5 companies/month growing to 10+/month by Y3. Combined target: $29.8M by Year 3.</p>
+
+<!-- YEAR 1 DETAIL -->
+<h3 style="font-size:16px;margin-bottom:10px">Year 1 Quarterly Detail</h3>
+<div class="tw">
+<table>
+<thead>
+<tr><th>Q</th><th class="r">Active Paid Users</th><th class="r">Consumer Sub MRR</th><th class="r">Teams Seats</th><th class="r">Teams MRR</th><th class="r">B2B Bespoke</th><th class="r">B2B License</th><th class="r">Quarter Total</th></tr>
+</thead>
+<tbody>
+<tr><td>Q1</td><td class="r">14,625</td><td class="r">$753K</td><td class="r">75</td><td class="r">$6K</td><td class="r">$270K</td><td class="r">$11K</td><td class="r">$1,310K</td></tr>
+<tr><td>Q2</td><td class="r">32,418</td><td class="r">$1,669K</td><td class="r">150</td><td class="r">$12K</td><td class="r">$317K</td><td class="r">$34K</td><td class="r">$2,284K</td></tr>
+<tr><td>Q3</td><td class="r">53,890</td><td class="r">$2,775K</td><td class="r">225</td><td class="r">$18K</td><td class="r">$373K</td><td class="r">$68K</td><td class="r">$3,541K</td></tr>
+<tr><td>Q4</td><td class="r">78,451</td><td class="r">$4,040K</td><td class="r">300</td><td class="r">$24K</td><td class="r">$438K</td><td class="r">$113K</td><td class="r">$5,009K</td></tr>
+<tr class="hr"><td>Y1 Total</td><td class="r">78,451 end</td><td class="r">$6,126K</td><td class="r">300</td><td class="r">$180K</td><td class="r">$1,398K</td><td class="r">$226K</td><td class="r" style="font-size:14px">$7,930K</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note">
+<strong>Consumer MRR calculation:</strong> Active paid users x weighted ARPU. Weighted ARPU = (69.2% x $35) + (30.8% x $100) = $55.02/user/month. Quarterly revenue = average of start and end MRR x 3 months. Annual billing discount reduces effective ARPU by ~7% (45% annual uptake x 15% discount).
+</div>
+
+<!-- 3 YEAR SUMMARY -->
+<h3 style="font-size:16px;margin:24px 0 10px">3-Year Revenue Summary</h3>
+<div class="tw">
+<table>
+<thead>
+<tr><th>Revenue Stream</th><th class="r">Year 1</th><th class="r">Year 2</th><th class="r">Year 3</th><th class="r">3-Year Total</th></tr>
+</thead>
+<tbody>
+<tr><td>Consumer Subscriptions (Pro + Max)</td><td class="r">$6,126,000</td><td class="r">$8,264,000</td><td class="r">$10,724,000</td><td class="r">$25,114,000</td></tr>
+<tr><td>Teams Subscriptions</td><td class="r">$180,000</td><td class="r">$576,000</td><td class="r">$1,152,000</td><td class="r">$1,908,000</td></tr>
+<tr><td>B2B Bespoke Projects</td><td class="r">$1,398,000</td><td class="r">$2,516,000</td><td class="r">$4,529,000</td><td class="r">$8,443,000</td></tr>
+<tr><td>B2B Licensing (Recurring)</td><td class="r">$226,000</td><td class="r">$766,000</td><td class="r">$1,396,000</td><td class="r">$2,388,000</td></tr>
+<tr class="hr"><td>Total Revenue</td><td class="r" style="font-size:15px">$7,930,000</td><td class="r" style="font-size:15px">$12,122,000</td><td class="r" style="font-size:15px">$17,801,000</td><td class="r" style="font-size:15px">$37,853,000</td></tr>
+<tr class="hr2"><td>YoY Growth</td><td class="r">N/A</td><td class="r" style="color:var(--gn)">+53%</td><td class="r" style="color:var(--gn)">+47%</td><td class="r"></td></tr>
+<tr class="hr3"><td>Total Recurring ARR (end of year)</td><td class="r">$4,580,000</td><td class="r">$7,232,000</td><td class="r">$10,476,000</td><td class="r"></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- KEY METRICS -->
+<div class="cg" style="grid-template-columns:repeat(4,1fr)">
+<div class="cd" style="border-left:4px solid var(--green)">
+<div class="sub">Year 1 Total</div>
+<div class="big" style="color:var(--gn)">$7.9M</div>
+<div class="sub">77% from subscriptions</div>
+</div>
+<div class="cd" style="border-left:4px solid var(--blue)">
+<div class="sub">Year 2 Total</div>
+<div class="big" style="color:var(--bl)">$12.1M</div>
+<div class="sub">+53% YoY growth</div>
+</div>
+<div class="cd" style="border-left:4px solid var(--pink)">
+<div class="sub">Year 3 Total</div>
+<div class="big" style="color:var(--pk)">$17.8M</div>
+<div class="sub">+47% YoY growth</div>
+</div>
+<div class="cd" style="border-left:4px solid var(--yellow)">
+<div class="sub">3-Year Cumulative</div>
+<div class="big" style="color:var(--yl)">$37.9M</div>
+<div class="sub">Blended 82% gross margin</div>
+</div>
+</div>
+
+<!-- CHART -->
+<div class="bar-wrap">
+<h4>Annual Revenue by Stream ($M)</h4>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:12px">
+<div style="text-align:center">
+<div style="font-size:11px;color:var(--t2);margin-bottom:8px">Year 1</div>
+<div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;height:140px">
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--green);height:82%"><div style="font-size:9px;text-align:center;padding-top:4px;font-weight:600">$6.1M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--blue);height:2.4%"><div style="font-size:9px;text-align:center;position:relative;top:-14px;font-weight:600">$0.2M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--pink);height:18.7%"><div style="font-size:9px;text-align:center;padding-top:4px;font-weight:600">$1.4M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--yellow);height:3%"><div style="font-size:9px;text-align:center;position:relative;top:-14px;font-weight:600">$0.2M</div></div>
+</div>
+</div>
+<div style="text-align:center">
+<div style="font-size:11px;color:var(--t2);margin-bottom:8px">Year 2</div>
+<div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;height:140px">
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--green);height:74%"><div style="font-size:9px;text-align:center;padding-top:4px;font-weight:600">$8.3M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--blue);height:5%"><div style="font-size:9px;text-align:center;position:relative;top:-14px;font-weight:600">$0.6M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--pink);height:22.5%"><div style="font-size:9px;text-align:center;padding-top:4px;font-weight:600">$2.5M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--yellow);height:6.8%"><div style="font-size:9px;text-align:center;position:relative;top:-14px;font-weight:600">$0.8M</div></div>
+</div>
+</div>
+<div style="text-align:center">
+<div style="font-size:11px;color:var(--t2);margin-bottom:8px">Year 3</div>
+<div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;height:140px">
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--green);height:67%"><div style="font-size:9px;text-align:center;padding-top:4px;font-weight:600">$10.7M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--blue);height:7.2%"><div style="font-size:9px;text-align:center;position:relative;top:-14px;font-weight:600">$1.2M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--pink);height:28.4%"><div style="font-size:9px;text-align:center;padding-top:4px;font-weight:600">$4.5M</div></div>
+<div style="width:40px;border-radius:4px 4px 0 0;background:var(--yellow);height:8.8%"><div style="font-size:9px;text-align:center;position:relative;top:-14px;font-weight:600">$1.4M</div></div>
+</div>
+</div>
+</div>
+<div style="display:flex;gap:16px;justify-content:center;margin-top:16px;font-size:11px">
+<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:var(--green);display:inline-block"></span> Consumer Subs</span>
+<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:var(--blue);display:inline-block"></span> Teams</span>
+<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:var(--pink);display:inline-block"></span> B2B Bespoke</span>
+<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:var(--yellow);display:inline-block"></span> B2B License</span>
+</div>
+</div>
+
+<!-- END YEAR METRICS -->
+<h3 style="font-size:16px;margin:24px 0 10px">End-of-Year Key Metrics</h3>
+<div class="tw">
+<table>
+<thead><tr><th>Metric</th><th class="r">End Y1</th><th class="r">End Y2</th><th class="r">End Y3</th></tr></thead>
+<tbody>
+<tr><td>Total Registered Users</td><td class="r">250,000</td><td class="r">293,750</td><td class="r">345,156</td></tr>
+<tr><td>Active Paying Users (Consumer)</td><td class="r">78,451</td><td class="r">97,064</td><td class="r">118,752</td></tr>
+<tr><td>Teams Seats (Cumulative)</td><td class="r">300</td><td class="r">600</td><td class="r">1,200</td></tr>
+<tr><td>B2B Bespoke Clients (Cumulative)</td><td class="r">36</td><td class="r">78</td><td class="r">134</td></tr>
+<tr><td>Monthly Recurring Revenue (MRR)</td><td class="r">$4.36M</td><td class="r">$5.59M</td><td class="r">$7.68M</td></tr>
+<tr><td>Annual Recurring Revenue (ARR)</td><td class="r">$52.3M</td><td class="r">$67.1M</td><td class="r">$92.2M</td></tr>
+<tr><td>Platform Gross Margin (Blended)</td><td class="r">82%</td><td class="r">83%</td><td class="r">84%</td></tr>
+<tr><td>Monthly API Spend (est.)</td><td class="r">$784K</td><td class="r">$951K</td><td class="r">$1.23M</td></tr>
+<tr class="hr"><td>LTV:CAC Ratio</td><td class="r">22:1</td><td class="r">26:1</td><td class="r">30:1</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- S4: COMPETITOR GROWTH MAP -->
+<section id="competitors">
+<div class="c">
+<div class="st">Section 4 of 5</div>
+<h2 class="sh">Competitive Growth Benchmarks</h2>
+<p style="color:var(--t2);font-size:13px;margin-bottom:24px">Two of the fastest-growing AI agent platforms launched in 2025. Both validate the market opportunity for multi-model agentic workspaces. Their revenue trajectories provide context for Helium AI's growth targets.</p>
+
+<div class="comp-grid">
+
+<!-- MANUS -->
+<div class="comp-card" style="border-top:4px solid var(--pink)">
+<h4>Manus AI</h4>
+<div class="sub">General AI Agent. Founded 2022, launched March 2025. Acquired by Meta for $2-3B (Dec 2025).</div>
+<div class="comp-metric"><span>Launch Date</span><span>March 2025</span></div>
+<div class="comp-metric"><span>Month 1</span><span>200+ countries, 2M waitlist</span></div>
+<div class="comp-metric"><span>Month 4 (Jul 2025)</span><span>$37M ARR</span></div>
+<div class="comp-metric"><span>Month 5 (Aug 2025)</span><span>$90M ARR</span></div>
+<div class="comp-metric"><span>Month 9 (Dec 2025)</span><span>$100M ARR</span></div>
+<div class="comp-metric"><span>Month 10 (Jan 2026)</span><span>$125M revenue run rate</span></div>
+<div class="comp-metric"><span>MoM Growth</span><span>20%+ sustained</span></div>
+<div class="comp-metric"><span>Team Size</span><span>78 employees</span></div>
+<div class="comp-metric"><span>Total Funding</span><span>$85M</span></div>
+<div class="comp-metric"><span>Pricing</span><span>$19-$199/mo (credit-based)</span></div>
+<div class="comp-metric"><span>Key Metric</span><span style="color:var(--pk)">$0 → $100M ARR in 8 months</span></div>
+</div>
+
+<!-- GENSPARK -->
+<div class="comp-card" style="border-top:4px solid var(--blue)">
+<h4>Genspark</h4>
+<div class="sub">AI Workspace / Super Agent. Founded 2023, launched Apr 2025. $1.25B valuation (Nov 2025).</div>
+<div class="comp-metric"><span>Launch Date</span><span>April 2025</span></div>
+<div class="comp-metric"><span>Day 9</span><span>$10M ARR</span></div>
+<div class="comp-metric"><span>Month 1.5 (May 2025)</span><span>$36M ARR</span></div>
+<div class="comp-metric"><span>Month 5 (Sep 2025)</span><span>$50M ARR</span></div>
+<div class="comp-metric"><span>Month 8 (Nov 2025)</span><span>$50M+ sustained</span></div>
+<div class="comp-metric"><span>Late 2025</span><span>$200M revenue (est.)</span></div>
+<div class="comp-metric"><span>MoM Growth</span><span>~20% sustained</span></div>
+<div class="comp-metric"><span>Team Size</span><span>~143 employees</span></div>
+<div class="comp-metric"><span>Total Funding</span><span>$460M</span></div>
+<div class="comp-metric"><span>Pricing</span><span>$99/mo primary tier</span></div>
+<div class="comp-metric"><span>Key Metric</span><span style="color:var(--bl)">$10M ARR in 9 days</span></div>
+</div>
+
+<!-- HELIUM -->
+<div class="comp-card" style="border-top:4px solid var(--green)">
+<h4>Helium AI <span class="tag-he">THIS COMPANY</span></h4>
+<div class="sub">Autonomous AI Platform. By Neural Arc Inc. Launched 2026. Bootstrapped, 15K+ users in ~55 days.</div>
+<div class="comp-metric"><span>Pre-Launch</span><span>15,000+ users in ~55 days</span></div>
+<div class="comp-metric"><span>Year 1 Target</span><span>250,000 users</span></div>
+<div class="comp-metric"><span>Y1 Subscription Rev</span><span>$6.1M</span></div>
+<div class="comp-metric"><span>Y1 Total Rev (incl. B2B)</span><span>$7.9M</span></div>
+<div class="comp-metric"><span>Y2 Total Revenue</span><span>$12.1M</span></div>
+<div class="comp-metric"><span>Y3 Total Revenue</span><span>$17.8M</span></div>
+<div class="comp-metric"><span>Team Size</span><span>Lean (founder-led)</span></div>
+<div class="comp-metric"><span>Funding Status</span><span>Bootstrapped + seeking</span></div>
+<div class="comp-metric"><span>Pricing</span><span>$35-$100/mo consumer</span></div>
+<div class="comp-metric"><span>Differentiator</span><span style="color:var(--gn)">Multi-model + media gen + Bees agents</span></div>
+<div class="comp-metric"><span>B2B Advantage</span><span style="color:var(--gn)">Bespoke delivery adds $1.4M+ Y1</span></div>
+</div>
+</div>
+
+<!-- COMPARISON TABLE -->
+<h3 style="font-size:16px;margin:28px 0 10px">Revenue Trajectory Comparison</h3>
+<div class="tw">
+<table>
+<thead><tr><th>Milestone</th><th class="r">Manus AI</th><th class="r">Genspark</th><th class="r">Helium AI (Target)</th></tr></thead>
+<tbody>
+<tr><td>Month 1 Revenue</td><td class="r">~$3M ARR</td><td class="r">$10M ARR</td><td class="r">$1M ARR</td></tr>
+<tr><td>Month 6 Revenue (ARR)</td><td class="r">$90M</td><td class="r">$50M</td><td class="r">$20M</td></tr>
+<tr><td>Year 1 Total Revenue</td><td class="r">~$100M</td><td class="r">~$150-200M</td><td class="r">$7.9M</td></tr>
+<tr><td>Funding Raised</td><td class="r">$85M</td><td class="r">$460M</td><td class="r">Bootstrapped</td></tr>
+<tr><td>Revenue/Employee</td><td class="r">~$1.6M</td><td class="r">~$1.4M</td><td class="r">TBD (lean)</td></tr>
+<tr class="hr"><td>Valuation / Exit</td><td class="r">$2-3B (Meta acquisition)</td><td class="r">$1.25B (Series B)</td><td class="r">Seeking investment</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note">
+<strong>What this means for Helium AI:</strong> Both Manus ($100M ARR in 8 months) and Genspark ($50M ARR in 5 months) prove massive demand for multi-model agentic platforms. Helium's $7.9M Y1 target is conservative by comparison. The key difference: both competitors raised $85M-$460M before or during launch, while Helium achieved 15K users bootstrapped. With investment capital to fuel paid acquisition, Helium's trajectory could accelerate to match these benchmarks. The product is comparable in scope (multi-model, media generation, autonomous agents via Bees), and the B2B bespoke channel provides a revenue stream neither competitor pursued.
+</div>
+
+<div class="verdict">
+<div style="font-size:36px;margin-bottom:10px">📈</div>
+<h3>Market Validated. Execution Ready.</h3>
+<p>Manus and Genspark proved that multi-model AI workspaces are a multi-hundred-million-dollar category in Year 1 alone. Helium AI targets a conservative $7.9M Y1 with a capital-efficient model. Investment accelerates the path to $50M+ ARR. The structural cost advantage from Kimi K2.5 (82% blended gross margins) provides better unit economics than competitors spending 3-5x more on inference.</p>
+</div>
+
+<div class="divider"></div>
+
+<p style="font-size:12px;color:var(--t2);max-width:800px;margin:0 auto;text-align:center">All Manus AI revenue data sourced from Sacra research estimates, SCMP, Yahoo Finance, and the company's official blog post (December 2025). Genspark data sourced from Sacra, BusinessWire, SiliconANGLE, Getlatka, and the company's press releases (November 2025). Revenue figures represent annualized run rates (ARR) at the reported time. Helium AI projections are forward-looking estimates based on stated business assumptions. Actual results will vary based on market conditions, execution, and capital availability.</p>
+</div>
+</section>
+
+<!-- S5: FEASIBILITY STUDY - WHY HELIUM WINS LONG TERM -->
+<section class="alt" id="feasibility">
+<div class="c">
+<div class="st">Section 5 of 5</div>
+<h2 class="sh">Feasibility Study: Why Helium AI Has a Higher Growth Ceiling</h2>
+<p style="color:var(--t2);font-size:13px;margin-bottom:24px;max-width:800px">Manus and Genspark validated the market, but neither occupies a defensible position for the next 3-5 years. Manus is now absorbed into Meta. Genspark is burning through $460M in venture capital. Helium AI holds structural advantages that compound over time. This section details why.</p>
+
+<!-- REASON 1: MANUS IS GONE -->
+<div style="background:var(--w);border:1px solid var(--bd);border-radius:14px;padding:28px;margin-bottom:20px;border-left:4px solid var(--pink)">
+<h4 style="font-size:17px;margin-bottom:12px">1. Manus AI No Longer Exists as an Independent Product</h4>
+<p style="font-size:13px;color:var(--t2);margin-bottom:16px">Meta acquired Manus for $2-3B in December 2025. This removes Helium's largest comparable competitor from the independent market entirely. The implications are significant:</p>
+<div class="cg" style="grid-template-columns:1fr 1fr;margin-bottom:0">
+<div class="cd" style="background:var(--pink-l)">
+<h4>Customer Exodus</h4>
+<div class="sub">CNBC reported (January 2026) that Manus customers are already leaving post-acquisition. Lindy AI (a competitor) confirmed a user bump from displaced Manus users. Privacy-conscious enterprises and creators will not trust their data inside a Meta-owned product. This is a direct acquisition opportunity for Helium.</div>
+</div>
+<div class="cd" style="background:var(--pink-l)">
+<h4>Product Dilution</h4>
+<div class="sub">Meta plans to embed Manus technology into Facebook, Instagram, and WhatsApp. The standalone Manus product will become a feature inside Meta's ecosystem, not an independent workspace. Users who need a neutral, model-agnostic platform will look for alternatives. Helium fills that gap.</div>
+</div>
+</div>
+</div>
+
+<!-- REASON 2: GENSPARK VULNERABILITY -->
+<div style="background:var(--w);border:1px solid var(--bd);border-radius:14px;padding:28px;margin-bottom:20px;border-left:4px solid var(--blue)">
+<h4 style="font-size:17px;margin-bottom:12px">2. Genspark Carries $460M in Venture Debt. Helium Does Not.</h4>
+<p style="font-size:13px;color:var(--t2);margin-bottom:16px">Genspark raised $460M at a $1.25B valuation. This creates expectations that Helium does not carry:</p>
+<div class="tw" style="margin-bottom:0">
+<table>
+<thead><tr><th>Factor</th><th>Genspark</th><th>Helium AI</th></tr></thead>
+<tbody>
+<tr><td>Total Capital Raised</td><td>$460M</td><td>$0 (Bootstrapped)</td></tr>
+<tr><td>Investor Return Expectation</td><td>10-20x on $1.25B = must hit $12-25B</td><td>Flexible. Any acquisition/growth is pure upside.</td></tr>
+<tr><td>Pricing Pressure</td><td>$99/mo minimum. Must maintain premium.</td><td>$35/mo entry. Room to grow ARPU over time.</td></tr>
+<tr><td>Burn Rate</td><td>High. 143 employees, massive infra spend.</td><td>Lean. Founder-led, capital-efficient.</td></tr>
+<tr><td>Path Dependency</td><td>Must grow into $1.25B valuation or face down-round.</td><td>Every dollar of revenue builds equity from $0 base.</td></tr>
+<tr class="hr"><td>Outcome if Market Slows</td><td>Distressed. Forced to cut or pivot.</td><td>Sustainable. Low burn = long runway at any scale.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- REASON 3: STRUCTURAL MOATS -->
+<div style="background:var(--w);border:1px solid var(--bd);border-radius:14px;padding:28px;margin-bottom:20px;border-left:4px solid var(--green)">
+<h4 style="font-size:17px;margin-bottom:12px">3. Five Structural Moats That Compound Over Time</h4>
+<p style="font-size:13px;color:var(--t2);margin-bottom:16px">Helium AI is not a chatbot. It is a platform with multiple reinforcing advantages that grow stronger as the user base scales:</p>
+<div class="cg" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0">
+<div class="cd" style="border-top:3px solid var(--green)">
+<h4>Cost Structure Moat</h4>
+<div class="sub">Kimi K2.5 at $0.50/$2.80 per M tokens. Genspark uses GPT-4, Claude, Gemini as primary models at 6-10x higher per-token costs. As usage scales, Helium's cost advantage grows wider. Competitors paying $3-15/M output tokens face margin compression that Helium avoids entirely.</div>
+</div>
+<div class="cd" style="border-top:3px solid var(--green)">
+<h4>Media Generation Moat</h4>
+<div class="sub">Helium generates images (Gemini 3 Pro), videos (Veo 3.1 + Wan 2.6), presentations, and audio natively. Manus had no native media generation. Genspark added design tools late. Helium launched with media at the core. This attracts creators, marketers, and SMBs that text-only agents do not serve.</div>
+</div>
+<div class="cd" style="border-top:3px solid var(--green)">
+<h4>B2B Revenue Moat</h4>
+<div class="sub">Neural Arc delivers bespoke AI projects at $30K + $15K/yr license. This creates high-touch enterprise relationships, recurring license revenue, and implementation expertise that feeds back into the Helium product. Neither Manus nor Genspark has a services arm.</div>
+</div>
+<div class="cd" style="border-top:3px solid var(--green)">
+<h4>Data Switching Cost Moat</h4>
+<div class="sub">AIM (Adaptive Intelligence Memory) stores user knowledge bases. Prism stores brand profiles. Bees store agent configurations. As users invest time configuring these systems, switching to a competitor means rebuilding from zero. This stickiness compounds monthly.</div>
+</div>
+<div class="cd" style="border-top:3px solid var(--green)">
+<h4>Price Accessibility Moat</h4>
+<div class="sub">$35/mo Pro undercuts ChatGPT Pro ($200), Manus Pro ($199), and Genspark ($99) by 65-82%. In price-sensitive markets (India, Southeast Asia, LATAM), this gap is the difference between adoption and rejection. Helium targets 1B+ knowledge workers globally, not only the US/EU premium segment.</div>
+</div>
+</div>
+</div>
+
+<!-- REASON 4: MARKET DYNAMICS -->
+<div style="background:var(--w);border:1px solid var(--bd);border-radius:14px;padding:28px;margin-bottom:20px;border-left:4px solid var(--yellow)">
+<h4 style="font-size:17px;margin-bottom:12px">4. The AI Agent Market Is Not Winner-Take-All</h4>
+<p style="font-size:13px;color:var(--t2);margin-bottom:16px">The AI agents market reached $7.92B in 2025 and is projected to grow to $236B by 2034 (45% CAGR). This market will fragment, not consolidate. Here is why:</p>
+<div class="cg" style="grid-template-columns:1fr 1fr;margin-bottom:12px">
+<div class="cd">
+<div class="big" style="color:var(--yl);font-size:28px">$236B</div>
+<div class="sub">Projected AI agent market by 2034. Even 0.1% market share = $236M revenue.</div>
+</div>
+<div class="cd">
+<div class="big" style="color:var(--yl);font-size:28px">80%</div>
+<div class="sub">Of enterprise applications will embed agent capabilities by 2026 (Salesforce Research).</div>
+</div>
+</div>
+<p style="font-size:13px;color:var(--t2)">SaaS has always been a multi-winner market. Slack did not kill email. Notion did not kill Google Docs. Figma did not kill Sketch. Each found a segment and scaled within it. The AI workspace market will follow the same pattern. ChatGPT owns general chat. Cursor owns coding. Helium targets the unified creative-and-productivity workspace for creators, SMBs, and emerging markets. That segment alone represents a $10B+ opportunity by 2030.</p>
+</div>
+
+<!-- REASON 5: INDEPENDENCE AS A FEATURE -->
+<div style="background:var(--w);border:1px solid var(--bd);border-radius:14px;padding:28px;margin-bottom:20px;border-left:4px solid var(--pink)">
+<h4 style="font-size:17px;margin-bottom:12px">5. Independence Is Now a Competitive Feature</h4>
+<p style="font-size:13px;color:var(--t2);margin-bottom:16px">Post-Manus acquisition, the market has a trust gap. Enterprises and power users want AI tools that are:</p>
+<div class="cg" style="grid-template-columns:1fr 1fr 1fr 1fr;margin-bottom:0">
+<div class="cd" style="text-align:center;background:var(--green-l)">
+<div style="font-size:24px;margin-bottom:8px">🔒</div>
+<div class="sub" style="font-weight:600;color:var(--t)">Not owned by big tech</div>
+<div class="sub">Helium is independent. No Meta, Google, or Microsoft parent.</div>
+</div>
+<div class="cd" style="text-align:center;background:var(--green-l)">
+<div style="font-size:24px;margin-bottom:8px">🌐</div>
+<div class="sub" style="font-weight:600;color:var(--t)">Model-agnostic</div>
+<div class="sub">Not locked to one provider. Orchestrator routes to the best model for each task.</div>
+</div>
+<div class="cd" style="text-align:center;background:var(--green-l)">
+<div style="font-size:24px;margin-bottom:8px">📊</div>
+<div class="sub" style="font-weight:600;color:var(--t)">Data stays yours</div>
+<div class="sub">No ad targeting. No cross-platform data sharing. AIM knowledge base is user-owned.</div>
+</div>
+<div class="cd" style="text-align:center;background:var(--green-l)">
+<div style="font-size:24px;margin-bottom:8px">💰</div>
+<div class="sub" style="font-weight:600;color:var(--t)">Aligned incentives</div>
+<div class="sub">Revenue comes from subscriptions, not advertising. Product decisions serve users, not shareholders.</div>
+</div>
+</div>
+</div>
+
+<!-- LONGEVITY TIMELINE -->
+<h3 style="font-size:16px;margin:28px 0 12px">Projected Relevance Timeline: 2026 to 2030</h3>
+<div class="tw">
+<table>
+<thead><tr><th>Year</th><th>Market Phase</th><th>Manus (Meta)</th><th>Genspark</th><th>Helium AI</th></tr></thead>
+<tbody>
+<tr><td>2026</td><td>Category formation. Multiple winners emerge.</td><td>Absorbed into Meta AI. Standalone product deprioritized.</td><td>Scaling with $460M. Burning fast.</td><td>Building user base to 250K. B2B flywheel starts.</td></tr>
+<tr><td>2027</td><td>Market matures. Switching costs solidify.</td><td>Manus brand fades. Features live inside Instagram/WhatsApp.</td><td>Must hit $1B+ revenue or face down-round.</td><td>Growing to 400K+ users. Teams and Bees adoption accelerates.</td></tr>
+<tr><td>2028</td><td>Consolidation begins. Weak players exit.</td><td>Fully integrated into Meta. No longer a standalone competitor.</td><td>Acquired, IPO, or pivot. High-burn model forces a decision.</td><td>Established as the independent, affordable multi-model platform. B2B license base generates $3M+ ARR alone.</td></tr>
+<tr><td>2029-30</td><td>Winners scale globally. $236B market.</td><td>Meta AI feature. Not a product.</td><td>Outcome-dependent on 2028 decision.</td><td class="hr" style="color:var(--gn)">Scaled platform with 500K+ users, deep switching costs, diversified revenue, and a clear path to $50M+ ARR.</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- FINAL VERDICT -->
+<div style="background:linear-gradient(135deg,var(--green-l),var(--yellow-l));border-radius:14px;padding:36px;text-align:center;margin-top:28px">
+<div style="font-size:40px;margin-bottom:10px">🏗️</div>
+<h3 style="font-size:22px;margin-bottom:10px">Helium AI Is Built to Last. Not Built to Flip.</h3>
+<p style="color:var(--t2);max-width:700px;margin:0 auto;font-size:13px">Manus was built for acquisition ($0 to $2B exit in 9 months). Genspark was built for venture returns ($460M raised, must deliver 10x). Helium AI is built for sustained, capital-efficient growth. The cost advantage from Kimi K2.5, the B2B revenue diversification, the media generation capabilities, and the price accessibility for global markets create a compound growth engine that does not depend on a single exit event or a single funding round. The competitors proved the market. Helium inherits a validated category with better unit economics, a broader feature set, and zero legacy investor obligations.</p>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="c">
+<p>Helium AI by Neural Arc Inc. Confidential Investor Document. March 2026.</p>
+</div>
+</footer>
+
+</body>
+</html>
